@@ -1,0 +1,203 @@
+<a href="images/00.png"><img class="alignnone size-large wp-image-4749" alt="00" src="images/00.png" width="625" height="324" /></a>
+
+Creating <a href="http://www.newyorker.com/online/blogs/elements/2013/11/the-rise-of-twitter-bots.html">Twitter bots</a>, automated text-generators that spew spam, <a href="https://twitter.com/pentametron">poetry</a>, and <a href="https://twitter.com/@StealthMountain">other things</a>, can be a bit of a confusing process. This tutorial will hopefully get you through the tough bits and make bot-building possible!
+
+For this tutorial I will be using <a href="http://www.python.org/">Python</a>, a language whose simplicity and natural syntax is great for working with text. However, this tutorial should be easily portable to your language of choice. I also assume you know at least enough programming to write your algorithmic text; if you need some help, I would suggest one of the myriad resources including <a href="http://learnxinyminutes.com/docs/python/">Learn X in Y Minutes</a> (or building a bot that just says the word "Duuuude!" over and over...).
+<h2>Contents</h2>
+<ol style="margin-top: -10px;">
+	<li><a href="#1">Create A Twitter Account</a></li>
+	<li><a href="#2">Create An Email Address</a></li>
+	<li><a href="#3">Complete Your Bot's Profile</a></li>
+	<li><a href="#4">Setup OAuth Access</a></li>
+	<li><a href="#5">Allow Write-Access To Your Twitter Account</a></li>
+	<li><a href="#6">Save OAuth Details</a></li>
+	<li><a href="#7">Make Your Bot Write Something!</a></li>
+	<li><a href="#8">Load OAuth Into Your Script</a></li>
+	<li><a href="#9">Download And Install Twitter Library</a></li>
+	<li><a href="#10">Connect To Twitter And Post!</a></li>
+	<li><a href="#11">Test, Launch, And Celebrate</a></li>
+	<li><a href="#12">Additional Resources</a></li>
+</ol>
+If you have any questions or suggestions, please post them in the comments!
+
+<a href="images/01-web.png"><img class="alignnone size-full wp-image-4710" alt="01-web" src="images/01-web.png" width="900" height="563" /></a>
+
+<a name="1"></a>
+<h2 style="margin-bottom: 0;">Create A Twitter Account</h2>
+First, create a Twitter account for your bot (easy!). I like to include the word "bot" in the account name if possible, so followers are clear the Tweets are generated, <a href="http://www.newyorker.com/online/blogs/elements/2013/09/horse-ebooks-and-pronunciation-book-revealed.html">not written by a human</a>. Of course, if the goal of your bot is <a href="http://en.wikipedia.org/wiki/Turing_test">confusing the two</a>, then a more cryptic name might be better-suited.
+
+You will need an email address for this step, so you may want to simultaneously check available usernames, quickly set up your email address (see <a href="#2">step 2</a>), then create your bot's account.
+
+<a href="images/02-web.png"><img class="alignnone size-large wp-image-4711" alt="02-web" src="images/02-web.png" width="625" height="390" /></a>
+
+<a name="2"></a>
+<h2 style="margin-bottom: 0;">Create An Email Address</h2>
+<strong></strong>Also easy: create an email address for your bot. If you have web hosting it likely includes a <em>lot </em>of email addresses (my basic hosting allows me to create up to 1200), or use a service like Gmail.
+
+<a href="images/03-web.png"><img class="alignnone size-large wp-image-4712" alt="03-web" src="images/03-web.png" width="625" height="390" /></a>
+
+<a name="3"></a>
+<h2 style="margin-bottom: 0;">Complete Your Bot's Profile</h2>
+Style your bot's page as desired. Just like the bot's username, I generally make clear in the description that the Tweets are algorithmically-generated. Don't forget a memorable profile image, too!
+
+<a href="images/04-web.png"><img class="alignnone size-large wp-image-4713" alt="04-web" src="images/04-web.png" width="625" height="390" /></a>
+
+<a name="4"></a>
+<h2 style="margin-bottom: 0;">Setup OAuth Access</h2>
+Ok, now for the part you probably haven't done before. In order for your bot to auto-upload to Twitter, you need to set up <a href="http://en.wikipedia.org/wiki/OAuth">OAuth</a>, essentially a set of passwords for 3rd parties (like your favorite Twitter client) to access your account. Read more about the OAuth process <a href="http://en.wikipedia.org/wiki/OAuth">here</a> and<a href="https://dev.twitter.com/docs/auth/oauth/faq"> here</a>.
+
+Head to <a href="https://dev.twitter.com/">dev.twitter.com</a> and sign in. Then click on the <strong><em>My Applications</em></strong> link as seen above.
+
+<a href="images/05-web.png"><img class="alignnone size-large wp-image-4714" alt="05-web" src="images/05-web.png" width="625" height="390" /></a>
+
+You should have no applications for this account, so click the <strong><em>Create New Account</em></strong> button in the upper-right...
+
+<a href="images/06-web.png"><img class="alignnone size-large wp-image-4715" alt="06-web" src="images/06-web.png" width="625" height="390" /></a>
+
+Give your application a name, a short description, and a link to your website - this is all just for your use, so don't sweat the details too much.
+
+<a href="images/07-web.png"><img class="alignnone size-large wp-image-4716" alt="07-web" src="images/07-web.png" width="625" height="390" /></a>
+
+<a name="5"></a>
+<h2 style="margin-bottom: 0;">Allow Write-Access To Your Twitter Account</h2>
+Once filled out, your new app should appear with some details including the first two parts of the OAuth settings: consumer key and consumer secret. However, the default settings are read-only, which means we're still missing the ability to use our application to post Tweets.
+
+Click on the <strong><em>Settings</em></strong> tab...
+
+<a href="images/08-web.png"><img class="alignnone size-large wp-image-4717" alt="08-web" src="images/08-web.png" width="625" height="390" /></a>
+
+Change access to "read, write, and access direct messages", allowing us full access to the account. Save the settings.
+
+<a href="images/09-web.png"><img class="alignnone size-large wp-image-4718" alt="09-web" src="images/09-web.png" width="625" height="390" /></a>
+
+Return to the <strong><em>Details</em></strong> tab - you should now have a <strong><em>Create access token</em></strong> button at the bottom. Click it to generate the other half of the OAuth settings. The page should refresh and you'll see them appear like in the image below.
+
+Note: sometimes this step is a little buggy. You might need to click the button once or twice, or re-select "Read, write..." in the <strong><em>Settings</em></strong> tab.
+
+<a href="images/10-web.png"><img class="alignnone size-large wp-image-4719" alt="10-web" src="images/10-web.png" width="625" height="390" /></a>
+
+<a name="6"></a>
+<h2 style="margin-bottom: 0;">Save OAuth Details</h2>
+Now we have the four parts needed for OAuth access:
+<ol style="margin-top: -10px;">
+	<li>Consumer key (kind of a like a username for the app)</li>
+	<li>Consumer secret (the matching password for the app)</li>
+	<li>Access token (a sort of username for access to write to the account)</li>
+	<li>Access token secret (the matching password to write)</li>
+</ol>
+Copy/paste the above details into a new text file in the following format:
+<pre class="lang:python decode:true">settings = {
+	'consumer_key': 'xxxx',
+	'consumer_secret': 'xxxx',
+	'access_token_key': 'xxxx',
+	'access_token_secret': 'xxxx'
+}</pre>
+... and save to a file called <span class="lang:python decode:true  crayon-inline ">OAuthSettings.py</span>  (of course, replacing <span class="lang:default decode:true  crayon-inline ">xxxx</span>  with your settings).
+
+We're using a separate file for security reasons: by keeping these details separate from our source code, we can share the bot's source using GitHub without fear of accidentally including the passwords!
+
+Note: if releasing your bot's code on GitHub, be sure to add <span class="lang:python decode:true  crayon-inline ">OAuthSettings.py</span>  to your <span class="lang:default decode:true  crayon-inline ">gitignore</span>  file.
+
+<a name="7"></a>
+<h2 style="margin-bottom: 0;">Make Your Bot Write Something!</h2>
+Create your bot's basic code, without worrying about the Twitter side. This let's you test your bot locally and work out the details. Just keep in mind the basic limitations of Twitter: 140 characters or less, and no text formatting like bold or italic (though emoji are likely supported for most users).
+
+Here's a simple example written in Python that creates little math problems - not very interesting as a bot but the code is easy to understand:
+<pre class="lang:python decode:true">from random import randrange
+
+# create two random numbers between -100/100
+num1 = str(randrange(-100,100))
+num2 = str(randrange(0,100))
+
+# choose a random operator
+operator = randrange(0,4)
+if operator == 0:
+	operator = '+'
+elif operator == 1:
+	operator = '-'
+elif operator == 2:
+	operator = '*'
+elif operator == 3:
+	operator = '/'
+
+# computer the result using eval(), convert to a string
+result = str(eval(num1 + operator + num2))
+
+# format the Tweet nicely with spaces
+tweet = num1 + ' ' + operator + ' ' + num2 + ' = ' + result
+print tweet</pre>
+Test your code locally and tweak the results. For more complex text-generation, it may be helpful to use the <span class="lang:python decode:true  crayon-inline ">len()</span>  command to test the length of your resulting Tweets.
+
+Notice my final Tweet is stored in a variable called <span class="lang:python decode:true  crayon-inline ">tweet</span> . You can call it whatever you want, but you'll need to remember it when you post your Tweet in a few steps.
+
+<a name="8"></a>
+<h2 style="margin-bottom: 0;">Load OAuth Into Your Script<strong>
+</strong></h2>
+Once your bot's inner workings are all set, we need to load the OAuth settings from the file we created earlier (named <em>OAuthSettings.py</em>) with a few extra lines of code. Put this line at the start of your script:
+<pre class="lang:python decode:true">from OAuthSettings import settings</pre>
+This loads the settings from the file into a Python dictionary, which can be accessed:
+<pre class="lang:python decode:true">consumer_key = settings['consumer_key']
+consumer_secret = settings['consumer_secret']
+access_token_key = settings['access_token_key']
+access_token_secret = settings['access_token_secret']</pre>
+We'll use these variables in the next step to connect to Twitter. Easy!
+
+<a name="9"></a>
+<h2 style="margin-bottom: 0;">Download And Install Twitter Library</h2>
+While we could create a connection to Twitter by writing all our own Python code, why re-invent the wheel? We'll use <a href="https://github.com/bear/python-twitter">Mike Taylor's simple Twitter library</a>, available at: <a href="https://github.com/bear/python-twitter">https://github.com/bear/python-twitter</a>. Save the library to your computer, then run the following commands to install it:
+<pre class="lang:default decode:true">cd path/to/downloaded/folder</pre>
+This navigates to the directory that the Twitter library is saved (as a shortcut, type <span class="lang:default decode:true  crayon-inline ">cd</span>  f<em></em>ollowed by a space, then drag the folder into the Terminal window instead of typing the full path).
+<pre class="lang:default decode:true">sudo python setup.py install</pre>
+This installs the library on your computer, along with any other required modules. If everything went well, test the installation by running the following commands:
+<pre class="lang:default decode:true">python
+&gt;&gt; import twitter</pre>
+If you don't get an error, you're all set to launch your bot!
+
+<a name="10"></a>
+<h2 style="margin-bottom: 0;">Connect To Twitter And Post!</h2>
+We can now load the Twitter library into our script, connect to Twitter using our OAuth credentials, and post a Tweet - nearly there!. First, import the Twitter library (do this at the top of your script):
+<pre class="lang:python decode:true">import twitter</pre>
+Then, later in your script we connect to Twitter using the settings and post! Since I called my Tweet's string <span class="lang:python decode:true  crayon-inline ">tweet</span>  earlier, I use that here. If you used a different variable name, change the code below.
+<pre class="lang:python decode:true">try:
+	api = twitter.Api(
+	consumer_key = consumer_key, 
+	consumer_secret = consumer_secret, 
+	access_token_key = access_token_key, 
+	access_token_secret = access_token_secret)
+
+	status = api.PostUpdate(tweet)
+	print '  post successful!'
+
+except twitter.TwitterError:
+	print 'error posting!'</pre>
+Notice that everything is wrapped in a <span class="lang:python decode:true  crayon-inline ">try/except</span>  statement to catch any errors along the way. This gives us feedback if there's a problem connecting or posting.
+
+<a name="11"></a>
+<h2 style="margin-bottom: 0;">Test, Launch, and Celebrate</h2>
+Now it's time to test your bot by running your finished Python code. Just run the script the way you normally do and if all went well, you should see your new Tweet appear online! Congrats!
+
+<a href="images/11-web.png"><img class="alignnone size-large wp-image-4720" alt="11-web" src="images/11-web.png" width="625" height="390" /></a>
+
+You now have a few options on how to run your bot:
+<ol style="margin-top: -10px;">
+	<li><strong>Run Locally</strong>
+Just run your bot when you feel like it, like we did above for testing.</li>
+	<li><strong>Schedule Automatic Posting</strong>
+For more automated and regular posting, try using <a href="http://stackoverflow.com/a/6782270/1167783">Applescript</a> or <a href="http://en.wikipedia.org/wiki/Cron">Cron</a> (I use <a href="http://code.google.com/p/cronnix/">Cronnix</a>, a free software tool for Mac that makes scheduling a little easier). This can be set to run at regular intervals (for example, using Cron/Cronnix I can set the script to run every hour using <span class="lang:default decode:true  crayon-inline ">0 * * * *</span>  or every 5 minutes using <span class="lang:default decode:true  crayon-inline ">*/5 * * * *</span> . The downside to this method is it only works when your computer is on and connected to the internet.</li>
+	<li><strong>Dedicated Computer/Server</strong>
+If you're building a lot of bots, you'll want to consider running them on a dedicated computer or your web server.</li>
+	<li><strong>Interesting Alternatives</strong>
+You might also consider triggering the bot when certain actions occur, for example using something like <a href="https://ifttt.com/">IFTTT</a> - imagine triggering a bot when <a href="https://ifttt.com/recipes/131683">tomorrow's weather is forecasted to be nice</a> or <a href="https://ifttt.com/recipes/131684">like a video on Vimeo</a>! You can also use this as a <a href="https://ifttt.com/recipes/131685">backup for storing your bot's awesome Tweets</a>.</li>
+</ol>
+<a name="12"></a>
+<h2 style="margin-bottom: 0;">Additional Resources</h2>
+While there are a <em>lot </em>of possible extensions and tools that can make your bots even more special, here are a few that might be most helpful.
+<ul style="margin-top: -10px;">
+	<li>Text-processing libraries: <a href="http://nltk.org/">Natural Language Toolkit (NLTK)</a> and <a href="http://textblob.readthedocs.org/en/latest/">Text Blob</a></li>
+	<li>Markov chains: <a href="http://en.wikipedia.org/wiki/Markov_chain">basics</a> and <a href="http://agiliq.com/blog/2009/06/generating-pseudo-random-text-with-markov-chains-u">a utilization in Python</a></li>
+	<li><a href="http://en.wikipedia.org/wiki/Markov_chain">Twitter's "public stream"</a> for access to realtime Tweets</li>
+	<li>Adam Parrish's great course resources for <a href="http://rwet.decontextualize.com">"Reading And Writing Electronic Texts"</a> at ITP</li>
+	<li><a href="http://pythonhosted.org/pyenchant">PyEnchant's spell checker</a> (great for algorithmic word generation)</li>
+	<li>Algorithmic text generation like <a href="http://en.wikipedia.org/wiki/Bayesian_poisoning">Bayesian Poisioning</a></li>
+</ul>
+Other resources? Suggestions? Please leave them in the comments!
