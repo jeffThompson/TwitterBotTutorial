@@ -3,8 +3,6 @@ Twitter Bot Tutorial
 
 A fairly detailed tutorial on creating Twitter bots.
 
-Creating Twitter bots, automated text-generators that spew spam, poetry, and other things, can be a bit of a confusing process. This tutorial will hopefully get you through the tough bits and make bot-building possible!
-
 * **RandomMathProblemBot.py**  
 A sample Python script used in the tutorial
 * **index.html**  
